@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: CI_PROJECT_NAME
+    app.gitlab.com/env: CI_ENVIRONMENT_SLUG
+    app.gitlab.com/app: CI_PROJECT_PATH_SLUG
+    maintainers: MAINTAINERS_TEAM
+  annotations:
+    app.gitlab.com/app: CI_PROJECT_PATH_SLUG
+    app.gitlab.com/env: CI_ENVIRONMENT_SLUG
+  name: CI_PROJECT_NAME
+  namespace: KUBE_NAMESPACE
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: CI_PROJECT_NAME
+  template:
+    metadata:
+      labels:
+        run: CI_PROJECT_NAME
+        app.gitlab.com/env: CI_ENVIRONMENT_SLUG
+        app.gitlab.com/app: CI_PROJECT_PATH_SLUG
+      annotations:
+        app.gitlab.com/env: CI_ENVIRONMENT_SLUG
+        app.gitlab.com/app: CI_PROJECT_PATH_SLUG
+    spec:
+      containers:
+      - image: DOCKER_ENV_CI_REGISTRY_IMAGE:CI_BUILD_TAG
+        imagePullPolicy: Always
+        name: CI_PROJECT_NAME
+        command: ["java", "-jar", "/opt/app/CI_PROJECT_NAME.jar", "--spring.config.name=application", " --spring.config.location=file:///config/"]
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            cpu: REQUEST_CPU #50m
+            memory: REQUEST_MEMORY #300Mi
+          limits:
+            cpu: LIMITS_CPU #100m
+            memory: LIMITS_MEMORY #600Mi
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: READINESS_INITIAL_DELAY #300
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            # host: my-host
+            # scheme: HTTPS
+            path: /CI_PROJECT_NAME/actuator/health
+            port: 8080
+            httpHeaders:
+            - name: X-Custom-Header
+              value: Awesome
+          initialDelaySeconds: LIVENESS_INITIAL_DELAY #1200
+          timeoutSeconds: 120
+        name: liveness
+        volumeMounts:
+        - name: app-config
+          mountPath: /opt/app/config/
+          readOnly: true
+        env:
+        - name: TZ
+          value: America/Sao_paulo
+      volumes:
+      - name: app-config
+        secret:
+          secretName: CI_PROJECT_NAME
+        resources: {}
+    
+      restartPolicy: Always
+

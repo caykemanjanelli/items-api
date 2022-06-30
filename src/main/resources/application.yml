@@ -1,0 +1,39 @@
+spring:
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+  datasource:
+    username: URMS_CADASTRO
+    password: cad#2020
+    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=RTPRBR70_DB)(PORT=1941)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=RTPRBR70)))
+    driver-class-name: oracle.jdbc.OracleDriver
+
+app:
+  params:
+    flexfieldUri: http://ws-flexfield-company-products.apps.ocpvp1.company.com.br/flexfield
+
+logging:
+  level:
+    root: INFO
+
+server:
+  servlet:
+    contextPath: /items
+  port: 8082
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+info:
+  app:
+    name: "@project.name@"
+    description: "@project.description@"
+    version: "@project.version@"
+    encoding: "@project.build.sourceEncoding@"
+    java:
+      version: "@java.version@"

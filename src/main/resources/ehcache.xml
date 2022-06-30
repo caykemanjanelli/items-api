@@ -1,0 +1,91 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.ehcache.org/v3" xsi:schemaLocation="
+    http://www.ehcache.org/v3 
+    http://www.ehcache.org/schema/ehcache-core-3.7.xsd">
+
+    <!--<persistence directory="spring-boot-ehcache/cache" />--> <!-- uncomment this tag to cache data in storage -->
+
+    <cache-template name="default">
+        <key-type>java.lang.String</key-type>
+        <expiry>
+            <ttl unit="seconds">10</ttl>
+        </expiry>
+
+        <!-- uncomment this tags to log cache events on console -->
+        <!-- <listeners>
+            <listener>
+                <class>br.com.company.cadastro.items.config.CacheEventLogger</class>
+                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
+                <event-ordering-mode>UNORDERED</event-ordering-mode>
+                <events-to-fire-on>CREATED</events-to-fire-on>
+                <events-to-fire-on>EXPIRED</events-to-fire-on>
+                <events-to-fire-on>EVICTED</events-to-fire-on>
+            </listener>
+        </listeners> -->
+
+        <resources>
+            <!-- <heap>1000</heap> --> <!-- uncomment this tag to cache data on java heap space (not recommended). The number refers to elements quantity on heap. -->
+            <offheap unit="MB">10</offheap> <!-- cache data on memory -->
+            <!--<disk persistent="true" unit="MB">20</disk>--> <!-- cache data on storage (uncomment "persistence directory" tag to run this mode) -->
+        </resources>
+    </cache-template>
+
+    <!-- mapping sku services -->
+    <cache alias="SKU-findById" uses-template="default">
+        <value-type>br.com.company.cadastro.items.models.SKU</value-type>
+    </cache>    
+
+    <cache alias="SKU-findByIdList" uses-template="default">
+        <key-type>java.util.ArrayList</key-type>
+        <value-type>java.util.ArrayList</value-type>
+    </cache>    
+
+    <cache alias="SKU-findByIdItemParent" uses-template="default">
+        <value-type>java.util.ArrayList</value-type>
+        <resources>
+            <offheap unit="MB">20</offheap>
+        </resources>
+    </cache>    
+
+
+    <!-- mapping diff type services -->
+    <cache alias="DiffGroupHead-findById" uses-template="default">
+        <value-type>br.com.company.cadastro.items.models.DiffGroupHead</value-type>
+    </cache>    
+
+    <cache alias="DiffId-findById" uses-template="default">
+        <value-type>br.com.company.cadastro.items.models.DiffId</value-type>
+    </cache>    
+
+    <cache alias="DiffType-findById" uses-template="default">
+        <value-type>br.com.company.cadastro.items.models.DiffType</value-type>
+    </cache>    
+
+    <!-- mapping item parent services-->
+    <cache alias="ItemParent-findById" uses-template="default">
+        <value-type>br.com.company.cadastro.items.models.ItemParent</value-type>
+    </cache>    
+
+    <cache alias="ItemParent-findByIdList" uses-template="default">
+        <key-type>java.util.ArrayList</key-type>
+        <value-type>java.util.ArrayList</value-type>
+    </cache>   
+    
+    <!-- mapping pack services-->
+    <cache alias="Pack-findById" uses-template="default">
+        <value-type>br.com.company.cadastro.items.models.Pack</value-type>
+    </cache>    
+
+    <cache alias="Pack-findByIdList" uses-template="default">
+        <key-type>java.util.ArrayList</key-type>
+        <value-type>java.util.ArrayList</value-type>
+    </cache>   
+
+    <!-- mapping pack item services -->
+    <cache alias="PackItem-findByPackId" uses-template="default">
+        <value-type>java.util.ArrayList</value-type>
+    </cache>   
+    
+    <cache alias="listByAtributo" uses-template="default" >
+        <key-type>java.lang.Long</key-type>
+    </cache>
+</config>
