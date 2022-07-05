@@ -1,0 +1,31 @@
+#Docker compose
+version: '3.8'
+
+# Dependencias da Aplicação
+services:
+  # Service para desenvolvimento (contendo o que é necessario para Desenvolver)
+  items-api:
+    container_name: items-api-container
+    # image: openjdk:17-jdk-alpine
+    # Funcionalidade dupla, quando usa a imagem no build o "image" da o nome da imagem
+    image: items-api:dev
+    # Comando para Up da APlicação
+    command: mvn spring-boot:run
+    # Instrução para buildar a imagem caso ela não exista no Docker hub
+    build: 
+      # colocando tudo que esta na raiz (por causa do ".") dentro do container de build 
+      context: .
+      # Target base, q é o nome da Layer do dockerfile
+      target: base
+    # Volume cria pasta caso nao exista
+    volumes:
+      - .:/app
+      - m2:/root/.m2
+    # Esquerda é a porta do Host -> Direita é a porta do Container
+    ports:
+      - 8080:8082
+    # diretorio padrão de trabalho, onde ja conecta nele quando entra no Container
+    working_dir: /app
+#Volume usado no service a cima.    
+volumes:
+  m2: {}

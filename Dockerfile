@@ -1,16 +1,8 @@
-#FROM registry.company.com.br:5005/company-containers/java-11-smallest-debian
-FROM registry.company.com.br:5005/company-containers/docker-java:develop
+# Layer de Dev (JDK para Desenvolver)
+FROM openjdk:17-jdk-alpine as base
 
-RUN mkdir /opt/app
-RUN chmod 777 -R /opt/app
+RUN apk update && apk upgrade
+RUN apk add maven
+RUN apk add git
 
-RUN mkdir /config
-RUN chmod 777 -R /config
-
-
-WORKDIR /opt/app
-
-ADD ./src/main/resources/application.yml /config/
-ADD ./target/CI_PROJECT_NAME.jar /opt/app/CI_PROJECT_NAME.jar
-
-ENTRYPOINT ["java", "-jar", "/opt/app/CI_PROJECT_NAME.jar", "--spring.config.name=application" ," --spring.config.location=file:///config/"]
+# Layer de Shipment (Apenas JRE)
