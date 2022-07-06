@@ -3,14 +3,14 @@ spring:
     jcache:
       config: classpath:ehcache.xml
   datasource:
-    username: URMS_CADASTRO
-    password: cad#2020
-    url: jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=RTPRBR70_DB)(PORT=1941)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=RTPRBR70)))
+    username: ${USER_NAME:URMS_CADASTRO}
+    password: ${USER_PASS:cad#2020}
+    url: ${DATABASE_URI:jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=RTPRBR70_DB)(PORT=1941)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=RTPRBR70)))}
     driver-class-name: oracle.jdbc.OracleDriver
 
 app:
   params:
-    flexfieldUri: http://ws-flexfield-company-products.apps.ocpvp1.company.com.br/flexfield
+    flexfieldUri: ${FLEX_FILD_URI:http://ws-flexfield-company-products.apps.ocpvp1.company.com.br/flexfield}
 
 logging:
   level:
