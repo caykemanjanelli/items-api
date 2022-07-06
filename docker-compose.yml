@@ -26,6 +26,12 @@ services:
       - 8080:8082
     # diretorio padrão de trabalho, onde ja conecta nele quando entra no Container
     working_dir: /app
+    # Codar environments dentro do application.yml
+    environment:
+      - DATABASE_URI=teste
+      - USER_NAME=${USER_NAME}
+      - USER_PASS=${USER_PASS}
+
 #Volume usado no service a cima.    
 volumes:
   m2: {}
