@@ -21,6 +21,7 @@ services:
     volumes:
       - .:/app
       - m2:/root/.m2
+      - $SSH_AUTH_SOCK:/ssh-agent
     # Esquerda é a porta do Host -> Direita é a porta do Container
     ports:
       - 8080:8082
@@ -31,6 +32,8 @@ services:
       - DATABASE_URI=teste
       - USER_NAME=${USER_NAME}
       - USER_PASS=${USER_PASS}
+      #Overwrite da variavel de sistema dentro do Container (ssh-agent)
+      - SSH_AUTH_SOCK=/ssh-agent
 
 #Volume usado no service a cima.    
 volumes:
